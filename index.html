@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PhongeGap Demo: Binaya</title>
+<!--    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />-->
+
+
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <!--<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>-->
+    <!--<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>-->
+    <script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="js/jquery-mobile.1.2.0.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/cordova-2.6.00.js"></script>
+</head>
+<body>
+<div data-role="header">
+    <h1 id="headerSec">Android Application</h1>
+    <h2 id="orientation">orientationchange Not Supported on this Device.</h2>
+</div>
+<div data-role = "content">
+    <form>
+        <!--<h4 style="color: Blue; text-align: center; font-size: 24px">Binaya Raj Shrestha</h4>-->
+        <label for="textinput-s">Text Input:</label>
+        <input type="text" name="textinput-s" id="textinput-s" placeholder="Text input" value="" data-clear-btn="true">
+        <label for="select-native-s">Select:</label>
+        <select name="select-native-s" id="select-native-s">
+            <option value="small">One</option>
+            <option value="medium">Two</option>
+            <option value="large">Three</option>
+        </select>
+        <label for="slider-s">Input slider:</label>
+        <input type="range" name="slider-s" id="slider-s" value="25" min="0" max="100" data-highlight="true">
+        <input type="button" name="submit" id="sendbtn" value="Submit" onclick="app.submitForm();">
+
+    </form>
+    <div class="box"></div>
+
+
+</div>
+<div data-role="footer">
+    <h3>(c) 2013 Binaya Raj Shrestha</h3>
+</div>
+<script>
+    app.initialize();
+</script>
+<script>
+
+    // Bind an event to window.orientationchange that, when the device is turned,
+    // gets the orientation and displays it to on screen.
+    /*$( window ).on( "orientationchange", function( event ) {
+        alert("changed orientation")
+        $( "#orientation" ).text( "This device is in " + event.orientation + " mode!" );
+    });
+
+    // You can also manually force this event to fire.
+    $( window ).orientationchange();
+    function submitForm(){
+
+    }*/
+</script>
+
+
+</body>
+</html>

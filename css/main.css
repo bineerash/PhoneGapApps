@@ -1,0 +1,11 @@
+div.box {
+    background-color: #108040;
+    height: 3em;
+    width: 30em;
+}
+div.box.swipeLeft {
+    background-color: #2163b2;
+}
+div.box.swipeRight {
+    background-color: rgba(218, 225, 48, 0.70);
+}
