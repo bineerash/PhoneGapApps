@@ -15,12 +15,19 @@
     <script type="text/javascript" src="js/jquery-1.8.2.js"></script>
     <script type="text/javascript" src="js/jquery-mobile.1.2.0.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-    <script type="text/javascript" src="js/cordova-2.6.0.js"></script>
+    <script type="text/javascript" src="js/cordova-2.6.00.js"></script>
 </head>
 <body>
 <div data-role="header">
     <h1 id="headerSec">Android Application</h1>
-    <h2 id="orientation">orientationchange Not Supported on this Device.</h2>
+    <h2 id="orientation">Orientationchange Not Supported on this Device.</h2>
+</div>
+<div data-role="content" id="home">
+    <button onclick="app.callCamera();">Camera Feature</button> <br>
+    <button onclick="app.callAccelerometer();" >Accelerometer</button> <br>
+    <button onclick="app.callCompass();" >Compass</button> <br>
+    <button onclick="app.callDevice();">Device</button> <br>
+    <button onclick="app.getGeoLocation();">GeoLocation</button> <br>
 </div>
 <div data-role = "content" id="main">
     <form>
@@ -41,6 +48,22 @@
     <div class="box"></div>
 
 
+</div>
+<div data-role="content" id="accelerometer">
+    <div class="box"></div>
+    <p> getCurrentAcceleration</p>
+    <span id="valueX"></span><br>
+    <span id="valueY"></span><br>
+    <span id="valueZ"></span><br>
+    <span id="timestamp"></span>
+</div>
+<div data-role="content" id="compass">
+    <div class="box"></div>
+    <p> getCurrentAcceleration</p>
+    <span id="heading"></span><br>
+   <!-- <span id="valueY"></span><br>
+    <span id="valueZ"></span><br>
+    <span id="timestamp"></span>-->
 </div>
 
 

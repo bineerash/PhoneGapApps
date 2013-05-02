@@ -25,7 +25,8 @@ var app = {
     initialize: function() {
         $.support.cors = true;
         this.bindEvents();
-        $("#camera").hide();
+        $($.find("[data-role='content']")).hide();
+        $("#home").show();
     },
     // Bind Event Listeners
     //
@@ -34,13 +35,17 @@ var app = {
     bindEvents: function() {
 
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        //document.addEventListener("backbutton", app.onBackButton, false);
         $(window).unbind("orientationchange");
         $( window ).on( "orientationchange",function(event){
             app.changeOrientation(event);
         });
         $( "div.box" ).on( 'swipeleft', this.swipeHandlerLeft );
         $( "div.box" ).on( 'swiperight', this.swipeHandlerRight );
+        $( "div#main" ).on( 'swiperight', this.mainSwipeRight );
+//        $( "div#camera" ).on( 'swipeleft', this.mainSwipeLeft );
         $( "div.box" ).on( 'taphold', this.tapHoldHandler );
+
 //        $("div#back").on('swipeleft', this.goBack);
     },
     // deviceready Event Handler
@@ -48,10 +53,69 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        alert("device Ready");
+
+
+        document.addEventListener("backbutton", app.onBackButton, true);
+        document.addEventListener("menubutton", app.onBackButton, true);
+        navigator.accelerometer.getCurrentAcceleration(app.onSuccess, app.onError);
+
+        //cordova.exec.overrideBackButton();
+        navigator.notification.alert(
+            'You are the winner!',  // message
+            app.alertDismissed,         // callback
+            'Game Over',            // title
+            'Done'                  // buttonName
+        );
+       // alert("device Ready");
         pictureSource=navigator.camera.PictureSourceType;
         destinationType=navigator.camera.DestinationType;
         app.receivedEvent('deviceready');
+        app.startWatch();
+        app.startWatchCompass();
+
+
+
+    },
+    // start monitoring the state of the accelerometer
+    startWatchCompass: function () {
+        var options = { frequency: 500 };
+        navigator.compass.watchHeading(app.onHeadingSuccess, app.onError, options);
+    },
+
+    // start monitoring the state of the accelerometer
+    startWatch: function () {
+        var options = { frequency: 500 };
+        navigator.accelerometer.watchAcceleration(app.onSuccess, app.onError, options);
+    },
+
+    // start monitoring the state of the accelerometer
+    onHeadingSuccess: function (heading) {
+        document.getElementById("heading").innerHTML = "You are Heading: " + heading.magneticHeading;
+
+    },
+    // onSuccess: Get a snapshot of the current acceleration
+    //
+    onSuccess: function (acceleration) {
+//    alert('Acceleration X: ' + acceleration.x + '\n' +
+//        'Acceleration Y: ' + acceleration.y + '\n' +
+//        'Acceleration Z: ' + acceleration.z + '\n' +
+//        'Timestamp: '      + acceleration.timestamp + '\n');
+
+        document.getElementById("valueX").innerHTML = "X Cordinate: " + acceleration.x;
+        document.getElementById("valueY").innerHTML = "Y Cordinate: " + acceleration.y;
+        document.getElementById("valueZ").innerHTML = "Z Cordinate: " + acceleration.z;
+        document.getElementById("timestamp").innerHTML = "Timestamp: " + acceleration.timestamp;
+},
+
+// onError: Failed to get the acceleration
+//
+    onError: function () {
+        alert('code: '    + error.code    + '\n' +
+            'message: ' + error.message + '\n');
+},
+
+    alertDismissed:function(){
+
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -64,6 +128,57 @@ var app = {
 
         console.log('Received Event: ' + id);*/
     },
+
+
+    callCamera:function(){
+        $($.find("[data-role='content']")).hide();
+        $("#camera").show();
+    },
+    callAccelerometer:function(){
+        $($.find("[data-role='content']")).hide();
+        $("#accelerometer").show();
+    },
+    callCompass:function(){
+        $($.find("[data-role='content']")).hide();
+        $("#compass").show();
+    },
+
+    // Gets the Device information on click of the button.
+    callDevice:function(){
+
+        navigator.notification.alert(
+            '<<<<  ----- Device Information -------- >>>> <br/>'+
+            'Device Name: '     + device.name     + '<br />' +
+                'Device Cordova: '  + device.cordova + '<br />' +
+                'Device Platform: ' + device.platform + '<br />' +
+                'Device UUID: '     + device.uuid     + '<br />' +
+                'Device Model: '    + device.model     + '<br />' +
+                'Device Version: '  + device.version  + '<br />',  // message
+            app.alertDismissed,         // callback
+            'Game Over',            // title
+            'Done'                  // buttonName
+        );
+        /*element.innerHTML = 'Device Name: '     + device.name     + '<br />' +
+            'Device Cordova: '  + device.cordova + '<br />' +
+            'Device Platform: ' + device.platform + '<br />' +
+            'Device UUID: '     + device.uuid     + '<br />' +
+            'Device Model: '    + device.model     + '<br />' +
+            'Device Version: '  + device.version  + '<br />';*/
+    },
+    getGeoLocation:function(){
+        navigator.geolocation.getCurrentPosition(app.onGeoSuccess, app.onError);
+    },
+    onGeoSuccess:function(position){
+        alert('Latitude: '          + position.coords.latitude          + '\n' +
+            'Longitude: '         + position.coords.longitude         + '\n' +
+            'Altitude: '          + position.coords.altitude          + '\n' +
+            'Accuracy: '          + position.coords.accuracy          + '\n' +
+            'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+            'Heading: '           + position.coords.heading           + '\n' +
+            'Speed: '             + position.coords.speed             + '\n' +
+            'Timestamp: '         + position.timestamp                + '\n');
+    },
+
     changeOrientation:function(event){
         alert("Orientation of the device is : "+ event.orientation);
 
@@ -77,7 +192,7 @@ var app = {
         $(event.target).addClass("swipeLeft");
 //        $.mobile.changePage("index.html");
         $("#camera").hide();
-        $("#main").show();
+        $("#home").show();
 
     },
     swipeHandlerRight:function(event){
@@ -88,12 +203,27 @@ var app = {
         //$.mobile.changePage("#camera");
         //alert("page changed");
     },
+    mainSwipeRight:function(event){
+        $("#main").hide();
+        $("#camera").show();
+    },
+    mainSwipeLeft:function(event){
+        $($.find("[data-role='content']")).hide();
+        $("#main").show();
+    },
     tapHoldHandler:function(event){
         $(event.target).removeClass("swipeLeft swipeRight");
         $(event.target).addClass("box");
     },
     goBack:function(){
         $.mobile.changePage("#main");
+    },
+    onBackButton:function(){
+        console.log(navigator.app);
+        confirm("Do you really want to Exit?");
+       // navigator.app.exitApp();
+        //navigator.app.exitApp();
+
     },
 
     // Called when a photo is successfully retrieved
@@ -186,6 +316,7 @@ var app = {
  onFail: function(message) {
     alert('Failed because: ' + message);
 }
+
 
 
 
